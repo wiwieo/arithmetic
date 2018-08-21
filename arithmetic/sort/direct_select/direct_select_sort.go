@@ -1,5 +1,7 @@
 package sort
 
+// 直接选择排序
+// 1、依次从未排序元素中找出最小值并存放到未排序第一个元素上
 func DirectSelectSort(ary []int){
 	// 	外层循环，用于记录有序数组。前面为有序
 	for i := 0; i < len(ary); i ++{

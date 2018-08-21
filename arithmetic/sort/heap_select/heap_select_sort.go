@@ -1,6 +1,8 @@
 package sort
 
 // 堆排序
+// 利用堆的属性，来查找出最小/最大值
+// 堆顶为最大/最小，将最后一个元素与堆顶交换即可
 func HeapSelectSort(ary []int){
 	for i := 0; i < len(ary); i ++{
 		adjustMaxHeap(ary, len(ary) - i)

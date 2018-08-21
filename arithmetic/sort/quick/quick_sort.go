@@ -1,5 +1,8 @@
 package sort
 
+// 快速排序
+// 1、以某个值（此处以最后一个值）为基准，将数组分为左右两部分，左边均小于基准值，右边均大于基准值
+// 2、循环进行上述操作
 func QuickSort(ary []int) {
 	partial(ary)
 }

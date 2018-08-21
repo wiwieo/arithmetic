@@ -1,5 +1,8 @@
 package sort
 
+// 归并排序
+// 1、将待排序数组划分成N个有序数组
+// 2、将有序数组合并
 func MergeSort(ary []int) {
 	sort(ary, 0, len(ary)-1)
 }

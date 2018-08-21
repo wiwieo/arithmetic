@@ -1,6 +1,9 @@
 package sort
 
 // 基数排序
+// 1、查出最大值
+// 2、将数组中的元素按照位数依次排序
+// 3、先按个位排，其次十位。。。
 func BaseSort(ary []int){
 	max := max(ary)
 	for idx := 1; max/idx > 1; idx*=10{

@@ -1,5 +1,7 @@
 package sort
 
+// 以一个步调值d为基，将数组分成d组，元素为：【d*N+idx】
+//
 func ShellInsertSort(ary []int) {
 	//希尔排序
 	// { 49, 38, 65, 97, 76, 13, 27, 49, 78, 34, 12, 64, 1 }

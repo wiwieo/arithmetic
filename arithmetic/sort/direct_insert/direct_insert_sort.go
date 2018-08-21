@@ -1,6 +1,8 @@
 package sort
 
 // 直接插入排序
+// 1、从第二个元素开始，依次与前面的值进行比对（循环依次比较）
+// 2、根据大小依次插入到对应的位置
 func DirectInsertSort(ary []int) {
 	// 外循环，用于取出每个待比较插入的值
 	for i := 1; i < len(ary); i++ {
