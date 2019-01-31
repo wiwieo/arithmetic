@@ -50,7 +50,6 @@ func (root *Node) InsertAndRotate(data int) error {
 		return err
 	}
 	factor := root.BalanceFactor()
-	println(factor, data)
 	if factor > 1 {
 		return root.left.CheckAndRotate(root)
 	} else if factor < -1 {
@@ -58,22 +57,144 @@ func (root *Node) InsertAndRotate(data int) error {
 	}
 	return nil
 }
+func (root *Node) DeleteAdnRotate(data int) error {
+	err := root.Delete(data)
+	if err != nil {
+		return err
+	}
+	return root.CheckAndRotate(root)
+}
 
-func (root *Node) Search(data int) (*Node, error) {
-	var parent = root
+func (root *Node) Delete(data int) error {
+	var current = root
+	var leftOrRight = 0 // 1：左，2：右
+	var parent *Node
 	for {
-		if parent == nil {
-			return nil, fmt.Errorf("node is not exist")
+		if current == nil {
+			return fmt.Errorf("node is not exist")
 		}
-		if data == parent.data {
-			return parent, nil
+		if data == current.data {
+			break
 		}
-		if data < parent.data {
-			parent = parent.left
+		if data < current.data {
+			parent = current
+			current = current.left
+			leftOrRight = 1
 			continue
 		}
-		if data > parent.data {
-			parent = parent.right
+		if data > current.data {
+			parent = current
+			current = current.right
+			leftOrRight = 2
+			continue
+		}
+	}
+
+	// 叶子节点
+	if current.left == nil && current.right == nil {
+		if parent == nil {
+			*root = Node{}
+			return nil
+		}
+		switch leftOrRight {
+		case 1:
+			parent.left = nil
+		case 2:
+			parent.right = nil
+		default:
+			return fmt.Errorf("program is exception, please contact to programer")
+		}
+		return nil
+	}
+
+	// 独子
+	if current.left != nil && current.right == nil {
+		if parent == nil {
+			current = current.left
+		} else {
+			switch leftOrRight {
+			case 1:
+				parent.left = current.left
+			case 2:
+				parent.right = current.left
+			default:
+				return fmt.Errorf("program is exception, please contact to programer")
+			}
+		}
+		return nil
+	}
+	if current.left == nil && current.right != nil {
+		if parent == nil {
+			current = current.right
+		} else {
+			switch leftOrRight {
+			case 1:
+				parent.left = current.right
+			case 2:
+				parent.right = current.right
+			default:
+				return fmt.Errorf("program is exception, please contact to programer")
+			}
+		}
+		return nil
+	}
+
+	// 双子
+	if current.left != nil && current.right != nil {
+		max := current.left.MaxForDel(current, 1)
+		max.left = current.left
+		max.right = current.right
+		if parent == nil {
+			current = max
+			return nil
+		}
+		switch leftOrRight {
+		case 1:
+			parent.left = max
+		case 2:
+			parent.right = max
+		default:
+			return fmt.Errorf("program is exception, please contact to programer")
+		}
+	}
+	return nil
+}
+
+func (root *Node) MaxForDel(parent *Node, l int) *Node {
+	if root.right == nil {
+		if l == 1 { // 第一层，根是父节点的左子
+			parent.left = nil
+			if root.left != nil {
+				parent.left = root.left
+				root.left = nil
+			}
+		} else { // 其他层，是父节点的右子
+			parent.right = nil
+			if root.left != nil {
+				parent.right = root.left
+				root.left = nil
+			}
+		}
+		return root
+	}
+	return root.right.MaxForDel(root, l+1)
+}
+
+func (root *Node) Search(data int) (*Node, error) {
+	var current = root
+	for {
+		if current == nil {
+			return nil, fmt.Errorf("node is not exist")
+		}
+		if data == current.data {
+			return current, nil
+		}
+		if data < current.data {
+			current = current.left
+			continue
+		}
+		if data > current.data {
+			current = current.right
 			continue
 		}
 	}
@@ -99,7 +220,7 @@ func (root *Node) Rotate() error {
 	}
 	if root.BalanceFactor() == -2 {
 		// 左-左旋一次即可
-		if root.right.BalanceFactor() == -1 {
+		if root.right.BalanceFactor() == -1 || root.right.BalanceFactor() == 0 {
 			return root.LeftRotate()
 		}
 		// 右-左旋
@@ -114,7 +235,7 @@ func (root *Node) Rotate() error {
 
 	if root.BalanceFactor() == 2 {
 		// 右旋一次即可
-		if root.left.BalanceFactor() == 1 {
+		if root.left.BalanceFactor() == 1 || root.left.BalanceFactor() == 0 {
 			return root.RightRotate()
 		}
 		// 左-右旋
