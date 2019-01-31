@@ -67,6 +67,23 @@ func TestNode_InsertAndRotate(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	err = root.DeleteAdnRotate(4)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = root.DeleteAdnRotate(2)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = root.DeleteAdnRotate(3)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = root.DeleteAdnRotate(30)
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	println("#############前序##############")
 	root.PreOrder()
 	println()
